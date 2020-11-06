@@ -1,0 +1,11 @@
+.form {
+  width: 80%;
+  border: none;
+  padding: 0;
+  margin: 0;
+  margin-left: 36px;
+  margin-top: 54px;
+  display: flex;
+  flex-direction: column;
+  max-width: 358px;
+}

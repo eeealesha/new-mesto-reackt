@@ -1,0 +1,7 @@
+.form__field {
+    position: relative;
+}
+
+.form__field:nth-child(2n) {
+    margin-top: 30px;
+  }

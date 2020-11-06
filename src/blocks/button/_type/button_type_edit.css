@@ -1,0 +1,17 @@
+.button_type_edit {
+  width: 24px;
+  height: 24px;
+  border: 1px solid #ffffff;
+  background-image: url(../../../images/pencil.png);
+  margin-left: 17px;
+  position: relative;
+  top: -4px;
+}
+
+@media screen and (max-width: 630px) {
+  .button_type_edit {
+    width: 18px;
+    height: 18px;
+    top: 0.3px;
+  }
+}
