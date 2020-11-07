@@ -45,7 +45,9 @@ function App() {
                       onEditProfile={handleEditProfileClick} onCardClick={handleCardClick}/>
                 <Footer/>
                 <PopupWithForm onClose={closeAllPopups} isOpen={isEditProfilePopupOpen} title='Редактировать профиль'
-                               name='profile' children={<fieldset className="form">
+                               name='profile' buttonText='Сохранить' children={
+
+                        <>
                     <label className="form__field">
                         <input
                             type="text"
@@ -69,11 +71,11 @@ function App() {
                             maxLength="200"
                         />
                         <div className="form__error-text" id="job-error"></div>
-                    </label>
-                    <button className="button button_type_submit">Сохранить</button>
-                </fieldset>}/>
+                    </label></>}/>
                 <PopupWithForm onClose={closeAllPopups} isOpen={isAddPlacePopupOpen} title='Новое место' name='add'
-                               children={<fieldset className="form">
+                    buttonText='Создать' children={
+            <>
+
                     <label className="form__field">
                         <input
                             type="text"
@@ -98,10 +100,10 @@ function App() {
                         />
                         <div className="form__error-text" id="img-error"></div>
                     </label>
-                    <button className="button button_type_submit">Создать</button>
-                </fieldset>}/>
+
+                </>}/>
                 <PopupWithForm onClose={closeAllPopups} isOpen={isEditAvatarPopupOpen} title='Обновить аватар'
-                               name='avatar' children={<fieldset className="form">
+                               name='avatar' buttonText='Сохранить' children={<>
                     <label className="form__field">
                         <input
                             type="url"
@@ -113,8 +115,7 @@ function App() {
                         />
                         <div className="form__error-text" id="link-error"></div>
                     </label>
-                    <button className="button button_type_submit" name="Сохранить">Сохранить</button>
-                </fieldset>}/>
+                </>}/>
                 <PopupWithForm onClose={closeAllPopups} title='Вы уверены?' name='confirm' children={<button
                                className="button button_type_submit button_type_confirm">Да</button>}/>
                 <ImagePopup onClose={closeAllPopups} card={selectedCard}/>
