@@ -37,6 +37,7 @@ function App() {
         setEditProfilePopupOpen(false);
         setAddPlacePopupOpen(false);
         setSelectedCard(null);
+        setImagePopupOpen(false)
     }
 
     return (
@@ -120,7 +121,7 @@ function App() {
                     </label>
                 </>}/>
                 <PopupWithForm onClose={closeAllPopups} title='Вы уверены?' name='confirm' buttonText='Да'/>
-                <ImagePopup onClose={closeAllPopups} card={selectedCard}/>
+                <ImagePopup onClose={closeAllPopups} isOpen={isImagePopupOpen} card={selectedCard}/>
             </div>
 
 
