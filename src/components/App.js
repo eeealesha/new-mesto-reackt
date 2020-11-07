@@ -116,9 +116,7 @@ function App() {
                         <div className="form__error-text" id="link-error"></div>
                     </label>
                 </>}/>
-                <PopupWithForm onClose={closeAllPopups} title='Вы уверены?' name='confirm' children={<button
-                               className="button button_type_submit button_type_confirm">Да</button>}/>
-                <ImagePopup onClose={closeAllPopups} card={selectedCard}/>
+                <PopupWithForm onClose={closeAllPopups} title='Вы уверены?' name='confirm' buttonText='Да'/>
             </div>
 
 

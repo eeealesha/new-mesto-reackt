@@ -29,7 +29,7 @@ export default function Main(props) {
                 //попадаем сюда если один из промисов завершаться ошибкой
                 console.log(err);
             });
-    }, [cards])
+    }, [])
 
     return (
         <main className="content">
