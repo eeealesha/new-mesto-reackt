@@ -4,6 +4,11 @@ import Footer from "./Footer";
 import {PopupWithForm} from "./PopupWithForm";
 import {ImagePopup} from "./ImagePopup";
 import React from 'react';
+import { api } from "../utils/api";
+
+//Импортируйте этот объект в App и используйте его провайдер
+
+import { CurrentUserContext } from '../contex/CurrentUserContext';
 
 
 function App() {
@@ -14,7 +19,27 @@ function App() {
     const [isImagePopupOpen, setImagePopupOpen] = React.useState(false); // true или false
     // Создаем стейт-переменную выбранной карточки
     const [selectedCard, setSelectedCard] = React.useState(null);
-
+    // Создайте стейт currentUser в корневом компоненте
+    const [currentUser, setCurrentUser] = React.useState({});
+    //  Эффект при монтировании, который будет вызывать api.getUserInfo и обновлять стейт-переменную из полученного значения.
+    React.useEffect(() => {
+        Promise.all([
+            //в Promise.all передаем массив промисов которые нужно выполнить
+            api.getUserInfo(),
+        ])
+            .then((values) => {
+                //попадаем сюда когда оба промиса будут выполнены
+                const [userData] = values;
+                console.log(userData._id);
+                setCurrentUser(userData);
+                // у нас есть все нужные данные, отрисовываем страницу
+            })
+            .catch((err) => {
+                //попадаем сюда если один из промисов завершаться ошибкой
+                console.log(err);
+            });
+    }, [])
+    console.log(currentUser);
     function handleCardClick(card) {
         setSelectedCard(card);
         setImagePopupOpen(true)
@@ -41,6 +66,9 @@ function App() {
     }
 
     return (
+        //«оберните» в него всё текущее содержимое корневого компонента
+        //В качестве значения контекста для провайдера используйте currentUser
+        <CurrentUserContext.Provider value={currentUser}>
         <div>
             <div className="page">
                 <Header/>
@@ -126,6 +154,7 @@ function App() {
 
 
         </div>
+            </CurrentUserContext.Provider>
     );
 }
 

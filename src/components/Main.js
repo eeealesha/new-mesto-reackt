@@ -1,27 +1,23 @@
 import React from 'react';
 import {api} from "../utils/api";
 import {Card} from "./Card";
+import { CurrentUserContext } from '../contex/CurrentUserContext';
 
 export default function Main(props) {
-    // Создаем стейт-переменные для профиля
-    const [userName, setUserName] = React.useState('');
-    const [userDescription, setUserDescription] = React.useState('');
-    const [userAvatar, setUserAvatar] = React.useState('');
+    
     // Создаем стейт-переменные для массива карточек
-    const [cards, setCards] = React.useState([])
+    const [cards, setCards] = React.useState([]);
+
+    const currentUser = React.useContext(CurrentUserContext);
 
     React.useEffect(() => {
         Promise.all([
             //в Promise.all передаем массив промисов которые нужно выполнить
-            api.getUserInfo(),
             api.getInitialCards()
         ])
             .then((values) => {
                 //попадаем сюда когда оба промиса будут выполнены
-                const [userData, initialCards] = values;
-                setUserName(userData.name);
-                setUserDescription(userData.about);
-                setUserAvatar(userData.avatar);
+                const [initialCards] = values;
                 setCards(initialCards);
                 // у нас есть все нужные данные, отрисовываем страницу
             })
@@ -38,7 +34,7 @@ export default function Main(props) {
                     <div className="profile__avatar">
                         <img
                             className="profile__picture"
-                            src={userAvatar}
+                            src={currentUser.avatar}
                             alt="Фотография Жака-Ив Кусто"
                         />
                         <button className="button botton_type_avatar" type="button"
@@ -46,11 +42,11 @@ export default function Main(props) {
                     </div>
                     <div className="profile__text">
                         <div className="profile__wrapper">
-                            <h1 className="profile__title">{userName}</h1>
+                            <h1 className="profile__title">{currentUser.name}</h1>
                             <button className="button button_type_edit" type="button"
                                     onClick={props.onEditProfile}></button>
                         </div>
-                        <p className="profile__subtitle">{userDescription}</p>
+                        <p className="profile__subtitle">{currentUser.about}</p>
                     </div>
                 </div>
                 <button className="button button_type_add" type="button" onClick={props.onAddPlace}></button>
