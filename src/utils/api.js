@@ -76,6 +76,21 @@ class Api {
       headers: this.headers,
     }).then(this._response);
   }
+
+  changeLikeCardStatus(_id, b) {
+    if (b) {
+      return fetch(`${this.baseUrl}/cards/likes/${_id}`, {
+        method: "PUT",
+        headers: this.headers,
+      }).then(this._response);
+    }
+    else {
+      return fetch(`${this.baseUrl}/cards/likes/${_id}`, {
+        method: "DELETE",
+        headers: this.headers,
+      }).then(this._response);
+    }
+  }
 }
 
 // Создаем экземпляр класса АПИ с нашими настройками
