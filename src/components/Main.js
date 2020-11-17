@@ -4,10 +4,10 @@ import {Card} from "./Card";
 import { CurrentUserContext } from '../contex/CurrentUserContext';
 
 export default function Main(props) {
-    
+
     // Создаем стейт-переменные для массива карточек
     const [cards, setCards] = React.useState([]);
-
+    // Подписываемся на контекст
     const currentUser = React.useContext(CurrentUserContext);
 
     React.useEffect(() => {
