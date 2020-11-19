@@ -125,10 +125,10 @@ function App() {
     function handleAddPlaceSubmit({name, link}) {
         console.log({name, link})
         api.postNewCard(name, link).then((res)=>{
-            console.log(res)
+            closeAllPopups();
             const newCard = res;
             setCards([newCard, ...cards]);
-            closeAllPopups();
+
         })
     }
 

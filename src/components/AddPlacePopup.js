@@ -19,6 +19,8 @@ export function AddPlacePopup(props){
             name: title,
             link: link
         })
+        setTitle("")
+        setLink("")
     }
 
     return(
