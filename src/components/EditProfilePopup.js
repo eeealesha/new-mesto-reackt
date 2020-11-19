@@ -4,8 +4,8 @@ import {CurrentUserContext} from '../contex/CurrentUserContext';
 
 export function EditProfilePopup(props) {
     // добавьте стейт-переменные name и description и привяжите их к полям ввода, сделав их управляемыми
-    const [name, setName]= React.useState('');
-    const [description, setDescription]= React.useState('');
+    const [name, setName]= React.useState(' ');
+    const [description, setDescription]= React.useState(' ');
 
     function handleNameChange(e) {
         setName(e.target.value);

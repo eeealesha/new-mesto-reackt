@@ -6,7 +6,7 @@ import {ImagePopup} from "./ImagePopup";
 import React from 'react';
 import { api } from "../utils/api";
 import {EditProfilePopup} from './EditProfilePopup';
-
+import {EditAvatarPopup} from './EditAvatarPopup';
 //Импортируйте этот объект в App и используйте его провайдер
 
 import { CurrentUserContext } from '../contex/CurrentUserContext';
@@ -65,6 +65,15 @@ function App() {
         );
     }
 
+    function handleUpdateAvatar({avatar}) {
+        console.log(avatar)
+        api.sendUserAvatar(avatar).then((res)=>{
+                closeAllPopups();
+                setCurrentUser(res);
+            }
+        );
+    }
+
     function closeAllPopups() {
         setAvatarPopupOpen(false)
         setEditProfilePopupOpen(false);
@@ -84,6 +93,7 @@ function App() {
                       onEditProfile={handleEditProfileClick} onCardClick={handleCardClick}/>
                 <Footer/>
                 <EditProfilePopup onUpdateUser={handleUpdateUser} isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} />
+                <EditAvatarPopup onUpdateAvatar={handleUpdateAvatar} isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} />
                 <PopupWithForm onClose={closeAllPopups} isOpen={isAddPlacePopupOpen} title='Новое место' name='add'
                                buttonText='Создать' children={
                     <>
@@ -114,20 +124,6 @@ function App() {
                         </label>
 
                     </>}/>
-                <PopupWithForm onClose={closeAllPopups} isOpen={isEditAvatarPopupOpen} title='Обновить аватар'
-                               name='avatar' buttonText='Сохранить' children={<>
-                    <label className="form__field">
-                        <input
-                            type="url"
-                            className="form__item form__item_el_link"
-                            id="link"
-                            name="link"
-                            placeholder="https://somewebsite.com/someimage.jpg"
-                            required
-                        />
-                        <div className="form__error-text" id="link-error"></div>
-                    </label>
-                </>}/>
                 <PopupWithForm onClose={closeAllPopups} title='Вы уверены?' name='confirm' buttonText='Да'/>
                 <ImagePopup onClose={closeAllPopups} isOpen={isImagePopupOpen} card={selectedCard}/>
             </div>
