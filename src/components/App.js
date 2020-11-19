@@ -7,9 +7,11 @@ import React from 'react';
 import { api } from "../utils/api";
 import {EditProfilePopup} from './EditProfilePopup';
 import {EditAvatarPopup} from './EditAvatarPopup';
+import {AddPlacePopup} from "./AddPlacePopup";
 //Импортируйте этот объект в App и используйте его провайдер
 
 import { CurrentUserContext } from '../contex/CurrentUserContext';
+
 
 
 function App() {
@@ -112,12 +114,22 @@ function App() {
     }
 
     function handleUpdateAvatar({avatar}) {
-        console.log(avatar)
+
         api.sendUserAvatar(avatar).then((res)=>{
                 closeAllPopups();
                 setCurrentUser(res);
             }
         );
+    }
+
+    function handleAddPlaceSubmit({name, link}) {
+        console.log({name, link})
+        api.postNewCard(name, link).then((res)=>{
+            console.log(res)
+            const newCard = res;
+            setCards([newCard, ...cards]);
+            closeAllPopups();
+        })
     }
 
     function closeAllPopups() {
@@ -140,36 +152,7 @@ function App() {
                 <Footer/>
                 <EditProfilePopup onUpdateUser={handleUpdateUser} isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} />
                 <EditAvatarPopup onUpdateAvatar={handleUpdateAvatar} isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} />
-                <PopupWithForm onClose={closeAllPopups} isOpen={isAddPlacePopupOpen} title='Новое место' name='add'
-                               buttonText='Создать' children={
-                    <>
-
-                        <label className="form__field">
-                            <input
-                                type="text"
-                                className="form__item form__item_el_place"
-                                id="place"
-                                name="place"
-                                placeholder="Название"
-                                required
-                                minLength="1"
-                                maxLength="30"
-                            />
-                            <div className="form__error-text" id="place-error"></div>
-                        </label>
-                        <label className="form__field">
-                            <input
-                                type="url"
-                                className="form__item form__item_el_img"
-                                id="img"
-                                name="img"
-                                placeholder="Ссылка на картинку"
-                                required
-                            />
-                            <div className="form__error-text" id="img-error"></div>
-                        </label>
-
-                    </>}/>
+                <AddPlacePopup onAddPlace={handleAddPlaceSubmit} isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} />
                 <PopupWithForm onClose={closeAllPopups} title='Вы уверены?' name='confirm' buttonText='Да'/>
                 <ImagePopup onClose={closeAllPopups} isOpen={isImagePopupOpen} card={selectedCard}/>
             </div>

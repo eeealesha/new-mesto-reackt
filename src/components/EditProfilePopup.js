@@ -3,29 +3,27 @@ import React from "react";
 import {CurrentUserContext} from '../contex/CurrentUserContext';
 
 export function EditProfilePopup(props) {
+    // Подписка на контекст
+    const currentUser = React.useContext(CurrentUserContext);
     // добавьте стейт-переменные name и description и привяжите их к полям ввода, сделав их управляемыми
-    const [name, setName]= React.useState(' ');
-    const [description, setDescription]= React.useState(' ');
+    const [name, setName]= React.useState("");
+    const [description, setDescription]= React.useState("");
 
-    function handleNameChange(e) {
+    const handleNameChange = (e) => {
         setName(e.target.value);
     }
-    function handleDescriptionChange(e) {
+    const handleDescriptionChange = (e) => {
         setDescription(e.target.value);
     }
     function handleSubmit(e) {
         // Запрещаем браузеру переходить по адресу формы
         e.preventDefault();
-
         // Передаём значения управляемых компонентов во внешний обработчик
         props.onUpdateUser({
             name,
             about: description,
         });
     }
-    // Подписка на контекст
-    const currentUser = React.useContext(CurrentUserContext);
-
     // После загрузки текущего пользователя из API
     // его данные будут использованы в управляемых компонентах.
     React.useEffect(() => {
@@ -46,7 +44,7 @@ export function EditProfilePopup(props) {
                     required
                     minLength="2"
                     maxLength="40"
-                    value={name}
+                    value={name || ''}
                     onChange={handleNameChange}
                 />
                 <div className="form__error-text" id="name-error"></div>
@@ -60,7 +58,7 @@ export function EditProfilePopup(props) {
                     required
                     minLength="2"
                     maxLength="200"
-                    value={description}
+                    value={description || ''}
                     onChange={handleDescriptionChange}
                 />
                 <div className="form__error-text" id="job-error"></div>
