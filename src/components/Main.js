@@ -1,7 +1,7 @@
 import React from 'react';
 import {api} from "../utils/api";
 import {Card} from "./Card";
-import { CurrentUserContext } from '../contex/CurrentUserContext';
+import {CurrentUserContext} from '../contex/CurrentUserContext';
 
 export default function Main(props) {
 
@@ -40,6 +40,20 @@ export default function Main(props) {
         });
     }
 
+    function handleCardDelete(card) {
+        // Снова проверяем, являемся ли мы владельцем карточки
+        const isOwn = card.owner._id === currentUser._id;
+
+        // Отправляем запрос в API и получаем обновлённые данные карточки
+        api.deleteCard(card._id, !isOwn).then(() => {
+            // Формируем новый массив на основе имеющегося, подставляя в него новую карточку
+            const newCards = cards.filter((c) => c._id !== card._id);
+            // Обновляем стейт
+            setCards(newCards);
+        });
+    }
+
+
     return (
         <main className="content">
             <section className="profile">
@@ -66,7 +80,8 @@ export default function Main(props) {
             </section>
             <section className="photo-grid">
                 <ul className="photo-grid__list">
-                    {cards.map((card, i) => <Card card={card} key={i} onClick={props.onCardClick} onCardLike={handleCardLike}/>)}
+                    {cards.map((card, i) => <Card card={card} key={i} onClick={props.onCardClick}
+                                                  onCardLike={handleCardLike} onCardDelete={handleCardDelete}/>)}
                 </ul>
             </section>
         </main>

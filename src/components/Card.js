@@ -20,7 +20,7 @@ export function Card(props) {
     return (
         <li className="card__element">
             <div className="card">
-                <button className={cardDeleteButtonClassName} type="button"></button>
+                <button className={cardDeleteButtonClassName} type="button" onClick={() => props.onCardDelete(props.card)}></button>
                 <img
                     className="photo-grid__item"
                     src={props.card.link}
