@@ -1,58 +1,10 @@
 import React from 'react';
-import {api} from "../utils/api";
 import {Card} from "./Card";
 import {CurrentUserContext} from '../contex/CurrentUserContext';
 
 export default function Main(props) {
-
-    // Создаем стейт-переменные для массива карточек
-    const [cards, setCards] = React.useState([]);
     // Подписываемся на контекст
     const currentUser = React.useContext(CurrentUserContext);
-
-    React.useEffect(() => {
-        Promise.all([
-            //в Promise.all передаем массив промисов которые нужно выполнить
-            api.getInitialCards()
-        ])
-            .then((values) => {
-                //попадаем сюда когда оба промиса будут выполнены
-                const [initialCards] = values;
-                setCards(initialCards);
-                // у нас есть все нужные данные, отрисовываем страницу
-            })
-            .catch((err) => {
-                //попадаем сюда если один из промисов завершаться ошибкой
-                console.log(err);
-            });
-    }, [])
-
-    function handleCardLike(card) {
-        // Снова проверяем, есть ли уже лайк на этой карточке
-        const isLiked = card.likes.some(i => i._id === currentUser._id);
-
-        // Отправляем запрос в API и получаем обновлённые данные карточки
-        api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
-            // Формируем новый массив на основе имеющегося, подставляя в него новую карточку
-            const newCards = cards.map((c) => c._id === card._id ? newCard : c);
-            // Обновляем стейт
-            setCards(newCards);
-        });
-    }
-
-    function handleCardDelete(card) {
-        // Снова проверяем, являемся ли мы владельцем карточки
-        const isOwn = card.owner._id === currentUser._id;
-
-        // Отправляем запрос в API и получаем обновлённые данные карточки
-        api.deleteCard(card._id, !isOwn).then(() => {
-            // Формируем новый массив на основе имеющегося, фильтраю по номеру карточки
-            const newCards = cards.filter((c) => c._id !== card._id);
-            // Обновляем стейт
-            setCards(newCards);
-        });
-    }
-
 
     return (
         <main className="content">
@@ -80,8 +32,8 @@ export default function Main(props) {
             </section>
             <section className="photo-grid">
                 <ul className="photo-grid__list">
-                    {cards.map((card, i) => <Card card={card} key={i} onClick={props.onCardClick}
-                                                  onCardLike={handleCardLike} onCardDelete={handleCardDelete}/>)}
+                    {props.cards.map((card, i) => <Card card={card} key={i} onClick={props.onCardClick}
+                                                  onCardLike={props.onCardLike} onCardDelete={props.onCardDelete}/>)}
                 </ul>
             </section>
         </main>
