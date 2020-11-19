@@ -4,14 +4,13 @@ import Footer from "./Footer";
 import {PopupWithForm} from "./PopupWithForm";
 import {ImagePopup} from "./ImagePopup";
 import React from 'react';
-import { api } from "../utils/api";
+import {api} from "../utils/api";
 import {EditProfilePopup} from './EditProfilePopup';
 import {EditAvatarPopup} from './EditAvatarPopup';
 import {AddPlacePopup} from "./AddPlacePopup";
 //Импортируйте этот объект в App и используйте его провайдер
 
-import { CurrentUserContext } from '../contex/CurrentUserContext';
-
+import {CurrentUserContext} from '../contex/CurrentUserContext';
 
 
 function App() {
@@ -70,6 +69,7 @@ function App() {
             setCards(newCards);
         });
     }
+
     //  Эффект при монтировании, который будет вызывать api.getUserInfo и обновлять стейт-переменную из полученного значения.
     React.useEffect(() => {
         Promise.all([
@@ -106,30 +106,26 @@ function App() {
     }
 
     function handleUpdateUser({name, about}) {
-        api.sendUserInfo(name, about).then((res)=>{
-            closeAllPopups();
-            setCurrentUser(res);
-            }
-        );
+        api.sendUserInfo(name, about)
+            .then((res) => setCurrentUser(res))
+            .catch((err) => console.log(err))
+            .finally(() => closeAllPopups())
     }
 
     function handleUpdateAvatar({avatar}) {
 
-        api.sendUserAvatar(avatar).then((res)=>{
-                closeAllPopups();
-                setCurrentUser(res);
-            }
-        );
+        api.sendUserAvatar(avatar)
+            .then((res) => setCurrentUser(res))
+            .catch((err) => console.log(err))
+            .finally(() => closeAllPopups())
+
     }
 
     function handleAddPlaceSubmit({name, link}) {
-        console.log({name, link})
-        api.postNewCard(name, link).then((res)=>{
-            closeAllPopups();
-            const newCard = res;
-            setCards([newCard, ...cards]);
-
-        })
+        api.postNewCard(name, link)
+            .then((res) => setCards([res, ...cards]))
+            .catch((err) => console.log(err))
+            .finally(() => closeAllPopups())
     }
 
     function closeAllPopups() {
@@ -144,22 +140,26 @@ function App() {
         //«оберните» в него всё текущее содержимое корневого компонента
         //В качестве значения контекста для провайдера используйте currentUser
         <CurrentUserContext.Provider value={currentUser}>
-        <div>
-            <div className="page">
-                <Header/>
-                <Main cards={cards} onCardLike={handleCardLike} onCardDelete={handleCardDelete} onEditAvatar={handleEditAvatar} onAddPlace={handleAddPlaceClick}
-                      onEditProfile={handleEditProfileClick} onCardClick={handleCardClick}/>
-                <Footer/>
-                <EditProfilePopup onUpdateUser={handleUpdateUser} isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} />
-                <EditAvatarPopup onUpdateAvatar={handleUpdateAvatar} isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} />
-                <AddPlacePopup onAddPlace={handleAddPlaceSubmit} isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} />
-                <PopupWithForm onClose={closeAllPopups} title='Вы уверены?' name='confirm' buttonText='Да'/>
-                <ImagePopup onClose={closeAllPopups} isOpen={isImagePopupOpen} card={selectedCard}/>
+            <div>
+                <div className="page">
+                    <Header/>
+                    <Main cards={cards} onCardLike={handleCardLike} onCardDelete={handleCardDelete}
+                          onEditAvatar={handleEditAvatar} onAddPlace={handleAddPlaceClick}
+                          onEditProfile={handleEditProfileClick} onCardClick={handleCardClick}/>
+                    <Footer/>
+                    <EditProfilePopup onUpdateUser={handleUpdateUser} isOpen={isEditProfilePopupOpen}
+                                      onClose={closeAllPopups}/>
+                    <EditAvatarPopup onUpdateAvatar={handleUpdateAvatar} isOpen={isEditAvatarPopupOpen}
+                                     onClose={closeAllPopups}/>
+                    <AddPlacePopup onAddPlace={handleAddPlaceSubmit} isOpen={isAddPlacePopupOpen}
+                                   onClose={closeAllPopups}/>
+                    <PopupWithForm onClose={closeAllPopups} title='Вы уверены?' name='confirm' buttonText='Да'/>
+                    <ImagePopup onClose={closeAllPopups} isOpen={isImagePopupOpen} card={selectedCard}/>
+                </div>
+
+
             </div>
-
-
-        </div>
-            </CurrentUserContext.Provider>
+        </CurrentUserContext.Provider>
     );
 }
 
