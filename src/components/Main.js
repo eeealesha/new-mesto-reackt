@@ -46,7 +46,7 @@ export default function Main(props) {
 
         // Отправляем запрос в API и получаем обновлённые данные карточки
         api.deleteCard(card._id, !isOwn).then(() => {
-            // Формируем новый массив на основе имеющегося, подставляя в него новую карточку
+            // Формируем новый массив на основе имеющегося, фильтраю по номеру карточки
             const newCards = cards.filter((c) => c._id !== card._id);
             // Обновляем стейт
             setCards(newCards);

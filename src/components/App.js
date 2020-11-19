@@ -5,6 +5,7 @@ import {PopupWithForm} from "./PopupWithForm";
 import {ImagePopup} from "./ImagePopup";
 import React from 'react';
 import { api } from "../utils/api";
+import {EditProfilePopup} from './EditProfilePopup';
 
 //Импортируйте этот объект в App и используйте его провайдер
 
@@ -30,7 +31,6 @@ function App() {
             .then((values) => {
                 //попадаем сюда когда оба промиса будут выполнены
                 const [userData] = values;
-                console.log(userData._id);
                 setCurrentUser(userData);
                 // у нас есть все нужные данные, отрисовываем страницу
             })
@@ -39,7 +39,7 @@ function App() {
                 console.log(err);
             });
     }, [])
-    console.log(currentUser);
+
     function handleCardClick(card) {
         setSelectedCard(card);
         setImagePopupOpen(true)
@@ -55,6 +55,16 @@ function App() {
 
     function handleAddPlaceClick() {
         setAddPlacePopupOpen(true);
+    }
+
+    function handleUpdateUser({name, about}) {
+        api.sendUserInfo(name, about).then((res)=>{
+            console.log(res)
+            setCurrentUser(res);
+            closeAllPopups();
+            }
+
+        );
     }
 
     function closeAllPopups() {
@@ -75,35 +85,7 @@ function App() {
                 <Main onEditAvatar={handleEditAvatar} onAddPlace={handleAddPlaceClick}
                       onEditProfile={handleEditProfileClick} onCardClick={handleCardClick}/>
                 <Footer/>
-                <PopupWithForm onClose={closeAllPopups} isOpen={isEditProfilePopupOpen} title='Редактировать профиль'
-                               name='profile' buttonText='Сохранить' children={
-
-                    <>
-                        <label className="form__field">
-                            <input
-                                type="text"
-                                className="form__item form__item_el_name"
-                                id="name"
-                                name="name"
-                                required
-                                minLength="2"
-                                maxLength="40"
-                            />
-                            <div className="form__error-text" id="name-error"></div>
-                        </label>
-                        <label className="form__field">
-                            <input
-                                type="text"
-                                className="form__item form__item_el_job"
-                                id="job"
-                                name="job"
-                                required
-                                minLength="2"
-                                maxLength="200"
-                            />
-                            <div className="form__error-text" id="job-error"></div>
-                        </label>
-                    </>}/>
+                <EditProfilePopup onUpdateUser={handleUpdateUser} isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} />
                 <PopupWithForm onClose={closeAllPopups} isOpen={isAddPlacePopupOpen} title='Новое место' name='add'
                                buttonText='Создать' children={
                     <>
