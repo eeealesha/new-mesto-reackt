@@ -30,12 +30,14 @@ function App() {
     React.useEffect(() => {
         Promise.all([
             //в Promise.all передаем массив промисов которые нужно выполнить
-            api.getInitialCards()
+            api.getInitialCards(),
+            api.getUserInfo()
         ])
             .then((values) => {
                 //попадаем сюда когда оба промиса будут выполнены
-                const [initialCards] = values;
+                const [initialCards, userData] = values;
                 setCards(initialCards);
+                setCurrentUser(userData);
                 // у нас есть все нужные данные, отрисовываем страницу
             })
             .catch((err) => {
@@ -54,7 +56,11 @@ function App() {
             const newCards = cards.map((c) => c._id === card._id ? newCard : c);
             // Обновляем стейт
             setCards(newCards);
-        });
+        })
+            .catch((err) => {
+                //попадаем сюда если один из промисов завершаться ошибкой
+                console.log(err);
+            });
     }
 
     function handleCardDelete(card) {
@@ -67,26 +73,13 @@ function App() {
             const newCards = cards.filter((c) => c._id !== card._id);
             // Обновляем стейт
             setCards(newCards);
-        });
-    }
-
-    //  Эффект при монтировании, который будет вызывать api.getUserInfo и обновлять стейт-переменную из полученного значения.
-    React.useEffect(() => {
-        Promise.all([
-            //в Promise.all передаем массив промисов которые нужно выполнить
-            api.getUserInfo(),
-        ])
-            .then((values) => {
-                //попадаем сюда когда оба промиса будут выполнены
-                const [userData] = values;
-                setCurrentUser(userData);
-                // у нас есть все нужные данные, отрисовываем страницу
-            })
+        })
             .catch((err) => {
                 //попадаем сюда если один из промисов завершаться ошибкой
                 console.log(err);
             });
-    }, [])
+
+    }
 
     function handleCardClick(card) {
         setSelectedCard(card);
@@ -107,25 +100,31 @@ function App() {
 
     function handleUpdateUser({name, about}) {
         api.sendUserInfo(name, about)
-            .then((res) => setCurrentUser(res))
+            .then((res) => {
+                setCurrentUser(res)
+                closeAllPopups()
+            })
             .catch((err) => console.log(err))
-            .finally(() => closeAllPopups())
     }
 
     function handleUpdateAvatar({avatar}) {
 
         api.sendUserAvatar(avatar)
-            .then((res) => setCurrentUser(res))
+            .then((res) => {
+                setCurrentUser(res);
+                closeAllPopups();
+            })
             .catch((err) => console.log(err))
-            .finally(() => closeAllPopups())
-
     }
 
     function handleAddPlaceSubmit({name, link}) {
         api.postNewCard(name, link)
-            .then((res) => setCards([res, ...cards]))
+            .then((res) => {
+                setCards([res, ...cards]);
+                closeAllPopups();
+            })
             .catch((err) => console.log(err))
-            .finally(() => closeAllPopups())
+
     }
 
     function closeAllPopups() {

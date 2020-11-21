@@ -10,8 +10,11 @@ export function EditAvatarPopup(props){
         props.onUpdateAvatar({
             avatar: avatarRef.current.value,
         });
-        avatarRef.current.value = "";
     }
+
+    React.useEffect(() => {
+        avatarRef.current.value = "";
+    }, [props.isOpen]);
 
     return(
         <PopupWithForm onClose={props.onClose} isOpen={props.isOpen} title='Обновить аватар'

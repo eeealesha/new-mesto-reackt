@@ -19,9 +19,12 @@ export function AddPlacePopup(props){
             name: title,
             link: link
         })
+
+    }
+    React.useEffect(() => {
         setTitle("")
         setLink("")
-    }
+    }, [props.isOpen]);
 
     return(
         <PopupWithForm onSubmit={handleSubmit} onClose={props.onClose} isOpen={props.isOpen} title='Новое место' name='add'
