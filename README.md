@@ -4,7 +4,7 @@
 
 ## Используемые технологии: 
 
-* Хуки useState и useEffect 
+* Хуки useState, useEffect, useRef, useContext
 * Create React App 
 * React Dev Tools
 
