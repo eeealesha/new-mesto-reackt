@@ -2,6 +2,7 @@ import {PopupWithForm} from "./PopupWithForm";
 import React from "react";
 import {CurrentUserContext} from '../contex/CurrentUserContext';
 
+
 export function EditProfilePopup(props) {
     // Подписка на контекст
     const currentUser = React.useContext(CurrentUserContext);
